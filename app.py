@@ -3,6 +3,28 @@ import streamlit as st
 from logic_utils import get_range_for_difficulty, parse_guess, check_guess, update_score
 # FIX: Refactored all game logic into logic_utils.py using Claude Code
 
+# Color-code hints by outcome: Too High = red, Too Low = blue, Win = green.
+HINT_COLORS = {
+    "Win": "green",
+    "Too High": "red",
+    "Too Low": "blue",
+}
+
+
+def render_hint(outcome, message):
+    """Display a hint message colored according to its outcome."""
+    color = HINT_COLORS.get(outcome, "gray")
+    st.markdown(f"### :{color}[{message}]")
+
+
+def render_summary():
+    """Render a table of every guess this session and its outcome."""
+    if st.session_state.get("rounds"):
+        st.divider()
+        st.subheader("📊 Session Summary")
+        st.table(st.session_state.rounds)
+
+
 st.set_page_config(page_title="Glitchy Guesser", page_icon="🎮")
 
 st.title("🎮 Game Glitch Investigator")
@@ -44,6 +66,10 @@ if "status" not in st.session_state:
 if "history" not in st.session_state:
     st.session_state.history = []
 
+# Records of each round (attempt #, guess, outcome) for the summary table.
+if "rounds" not in st.session_state:
+    st.session_state.rounds = []
+
 st.subheader("Make a guess")
 
 st.info(
@@ -77,6 +103,7 @@ if new_game:
     st.session_state.secret = random.randint(1, 100)
     st.session_state.status = "playing"
     st.session_state.history = []
+    st.session_state.rounds = []
     st.success("New game started.")
     st.rerun()
 
@@ -85,6 +112,7 @@ if st.session_state.status != "playing":
         st.success("You already won. Start a new game to play again.")
     else:
         st.error("Game over. Start a new game to try again.")
+    render_summary()
     st.stop()
 
 if submit:
@@ -94,6 +122,11 @@ if submit:
 
     if not ok:
         st.session_state.history.append(raw_guess)
+        st.session_state.rounds.append({
+            "Attempt": st.session_state.attempts,
+            "Guess": raw_guess,
+            "Outcome": "Invalid",
+        })
         st.error(err)
     else:
         st.session_state.history.append(guess_int)
@@ -103,8 +136,14 @@ if submit:
 
         outcome, message = check_guess(guess_int, secret)
 
+        st.session_state.rounds.append({
+            "Attempt": st.session_state.attempts,
+            "Guess": guess_int,
+            "Outcome": outcome,
+        })
+
         if show_hint:
-            st.warning(message)
+            render_hint(outcome, message)
 
         st.session_state.score = update_score(
             current_score=st.session_state.score,
@@ -127,6 +166,8 @@ if submit:
                     f"The secret was {st.session_state.secret}. "
                     f"Score: {st.session_state.score}"
                 )
+
+render_summary()
 
 st.divider()
 st.caption("Built by an AI that claims this code is production-ready.")

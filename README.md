@@ -50,4 +50,4 @@ python3 -m pytest tests/
 
 ## 🚀 Stretch Features
 
-- [ ] [If you choose to complete Challenge 4, describe the Enhanced UI changes here — a screenshot is optional]
+- [x] **Enhanced UI (Challenge 4):** Added color-coded hints — Too High shows in red, Too Low shows in blue, and Correct shows in green. Added a Session Summary table that tracks every guess, its outcome, and appears both during the game and after winning or losing.
