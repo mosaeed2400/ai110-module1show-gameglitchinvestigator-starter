@@ -67,15 +67,15 @@ No linter installed — Claude Code did a manual PEP 8 review instead.
 
 **Task given to both models:**
 
-I asked both Claude and ChatGPT to fix the backwards hints bug in the check_guess function.
+I asked both Claude and ChatGPT to explain the backwards hints bug in check_guess and how to fix it.
 
 | | Model A | Model B |
 |-|---------|---------|
 | **Model name** | Claude | ChatGPT |
-| **Response summary** | Identified the bug in both the main path and the TypeError fallback, explained why each was wrong | Fixed only the main path, missed the TypeError fallback |
-| **More Pythonic?** | Claude | Tie |
+| **Response summary** | Found the bug in both the main path and the TypeError fallback, explained the string conversion issue | Fixed only the main path, missed the TypeError fallback entirely |
+| **More Pythonic?** | Tie | Tie |
 | **Clearer explanation?** | Claude | ChatGPT |
 
 **Which did you prefer and why?**
 
-I preferred Claude because it caught the bug in both the main comparison path and the TypeError fallback, while ChatGPT only fixed the main path. Claude also explained the root cause more clearly.
+I preferred Claude because it caught the bug in both the main comparison path and the TypeError fallback, while ChatGPT only fixed the main path. However, ChatGPT gave a cleaner and simpler code fix that was easier to read at a glance.
