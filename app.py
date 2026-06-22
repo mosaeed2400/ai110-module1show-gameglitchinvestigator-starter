@@ -25,6 +25,30 @@ def render_summary():
         st.table(st.session_state.rounds)
 
 
+def render_guess_history_sidebar():
+    """Show a sidebar bar chart of how far each guess was from the secret.
+
+    Only numeric (valid) guesses are charted; invalid entries are skipped.
+    Bar height is the absolute distance from the secret, so shorter bars
+    mean the guess was closer.
+    """
+    valid = [
+        r for r in st.session_state.get("rounds", [])
+        if r["Outcome"] != "Invalid"
+    ]
+    if not valid:
+        return
+
+    secret = st.session_state.secret
+    distances = [abs(r["Guess"] - secret) for r in valid]
+    labels = [f"#{r['Attempt']}" for r in valid]
+
+    st.sidebar.divider()
+    st.sidebar.subheader("📊 Guess History")
+    st.sidebar.caption("Distance from secret (shorter = closer)")
+    st.sidebar.bar_chart({"label": labels, "Distance": distances}, x="label")
+
+
 st.set_page_config(page_title="Glitchy Guesser", page_icon="🎮")
 
 st.title("🎮 Game Glitch Investigator")
@@ -112,6 +136,7 @@ if st.session_state.status != "playing":
         st.success("You already won. Start a new game to play again.")
     else:
         st.error("Game over. Start a new game to try again.")
+    render_guess_history_sidebar()
     render_summary()
     st.stop()
 
@@ -167,6 +192,7 @@ if submit:
                     f"Score: {st.session_state.score}"
                 )
 
+render_guess_history_sidebar()
 render_summary()
 
 st.divider()

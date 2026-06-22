@@ -50,4 +50,5 @@ python3 -m pytest tests/
 
 ## 🚀 Stretch Features
 
-- [x] **Enhanced UI (Challenge 4):** Added color-coded hints — Too High shows in red, Too Low shows in blue, and Correct shows in green. Added a Session Summary table that tracks every guess, its outcome, and appears both during the game and after winning or losing.
+- [x] **Enhanced UI (Challenge 4):** Added color-coded hints — Too High shows in red, Too Low shows in blue, and Correct shows in green. Added a Session Summary table that tracks every guess and its outcome.
+- [x] **Feature Expansion (Challenge 2):** Added a Guess History sidebar bar chart that visualizes how close each previous guess was to the secret number. Shorter bars mean closer guesses.
