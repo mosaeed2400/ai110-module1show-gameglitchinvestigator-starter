@@ -30,7 +30,7 @@ I used Claude (claude.ai) and Claude Code in VS Code as my AI tools on this proj
 
 ## 3. Debugging and testing your fixes
 
-I decided a bug was really fixed when the game behaved correctly manually AND the pytest tests passed. For example, after fixing the hints, I tested by guessing 30 when the secret was 39 and confirmed it said "Go HIGHER" correctly. I then ran `python3 -m pytest tests/` and got 3 passed, which confirmed the fix was solid. Claude Code helped me understand why the tests were failing — it explained that check_guess returns a tuple, so the tests needed to unpack it with `outcome, message = check_guess(...)` instead of just `result = check_guess(...)`.
+I decided a bug was really fixed when the game behaved correctly manually AND the pytest tests passed. For example, after fixing the hints, I tested by guessing 30 when the secret was 39 and confirmed it said "Go HIGHER" correctly. I then ran `python3 -m pytest tests/` and got 3 passed, which confirmed the fix was solid. Claude Code helped me understand why the tests were failing — it explained that check_guess returns a tuple, so the tests needed to unpack it with `outcome, message = check_guess(...)` ...instead of just `result = check_guess(...)`. All three pytest tests passed after the fixes, confirming the game logic is correct.
 
 ---
 
