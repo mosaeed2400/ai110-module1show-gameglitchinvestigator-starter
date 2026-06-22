@@ -25,28 +25,26 @@ It wrote the code, ran away, and now the game is unplayable.
 
 ## 📝 Document Your Experience
 
-- [ ] Describe the game's purpose.
-- [ ] Detail which bugs you found.
-- [ ] Explain what fixes you applied.
+- [x] The game is a number guessing game where the player guesses a number between 1 and 100.
+- [x] Bugs found: backwards hints, New Game not resetting status, attempts starting at 1, secret converted to string on even attempts.
+- [x] Fixed hints logic, reset status on New Game, set attempts to 0, removed string conversion bug.
 
 ## 📸 Demo Walkthrough
 
-Describe your fixed game in numbered steps so a reader can follow along without watching a video:
-
-1. <!-- Describe this step -->
-2. <!-- Describe this step -->
-3. <!-- Describe this step -->
-4. <!-- Describe this step -->
-5. <!-- Add more steps as needed -->
+1. Run the app with `python3 -m streamlit run app.py`
+2. Open the Developer Debug Info tab to see the secret number
+3. Type a number lower than the secret — hint correctly says "Go HIGHER"
+4. Type a number higher than the secret — hint correctly says "Go LOWER"
+5. Type the exact secret number — game shows "Correct!" and you win
+6. Click New Game — game fully resets with a new secret number
 
 **Screenshot** *(optional)*: <!-- Insert a screenshot of your fixed, winning game here -->
 
 ## 🧪 Test Results
 
 ```
-# Paste your pytest output here, e.g.:
-# pytest tests/
-# ========================= X passed in 0.XXs =========================
+python3 -m pytest tests/
+========================= 3 passed in 0.02s =========================
 ```
 
 ## 🚀 Stretch Features
