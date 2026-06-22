@@ -10,15 +10,20 @@
 
 **What task did you give the agent?**
 
-<!-- Describe the goal you asked the agent to accomplish -->
+I asked Claude Code to add professional-grade docstrings to every function in logic_utils.py and check for PEP 8 compliance.
 
 **What did the agent do?**
 
-<!-- List the steps the agent took (files edited, commands run, etc.) -->
+- Read logic_utils.py to understand the current implementations
+- Added Google-style docstrings to all 4 functions with Args, Returns, and Notes sections
+- Fixed PEP 8 E302 violation (missing 2 blank lines between functions)
+- Verified all lines are under 79 characters
+- Fixed missing trailing newline at EOF
+- Ran a PEP 8 linter check and reported results
 
 **What did you have to verify or fix manually?**
 
-<!-- Describe anything the agent got wrong or that required human review -->
+Claude suggested changing `except Exception:` to `except (ValueError, TypeError):` in parse_guess. I reviewed it and decided to keep it as-is because the behavior was already correct and the change was outside the scope of this challenge.
 
 ---
 
@@ -28,9 +33,9 @@
 
 | Edge Case | Prompt Used | AI-Suggested Test | Did It Pass? | Your Reasoning |
 |-----------|-------------|-------------------|--------------|----------------|
-| | | | | |
-| | | | | |
-| | | | | |
+| Negative number input | "Generate a pytest case for a negative number guess" | test_negative_guess | Yes | Negative numbers are outside 1-100 range |
+| Decimal number input | "Generate a pytest case for a decimal guess like 42.9" | test_decimal_guess | Yes | Decimals should be truncated to int |
+| Very large number input | "Generate a pytest case for an extremely large number" | test_large_number_guess | Yes | Numbers above 100 should return Too High |
 
 ---
 
@@ -40,19 +45,19 @@
 
 **Prompt used:**
 
-```
-<!-- Paste the prompt you gave the AI -->
-```
+The functions are already implemented in logic_utils.py. Please read the current file again and add professional-grade docstrings to every function, then check for PEP 8 compliance.
 
 **Linting output before:**
 
-```
-<!-- Paste relevant linter warnings/errors -->
-```
+No linter installed — Claude Code did a manual PEP 8 review instead.
 
 **Changes applied:**
 
-<!-- Describe what you changed based on the AI's suggestions -->
+- Added Google-style docstrings to all 4 functions with Args, Returns, and Notes sections
+- Fixed PEP 8 E302 violation (missing 2 blank lines between functions)
+- Verified all lines are under 79 characters
+- Fixed missing trailing newline at EOF
+- Did NOT apply Claude's suggestion to change `except Exception:` to `except (ValueError, TypeError):` — behavior was already correct and change was out of scope
 
 ---
 
@@ -62,15 +67,15 @@
 
 **Task given to both models:**
 
-<!-- Describe what you asked each model to do -->
+I asked both Claude and ChatGPT to fix the backwards hints bug in the check_guess function.
 
 | | Model A | Model B |
 |-|---------|---------|
-| **Model name** | | |
-| **Response summary** | | |
-| **More Pythonic?** | | |
-| **Clearer explanation?** | | |
+| **Model name** | Claude | ChatGPT |
+| **Response summary** | Identified the bug in both the main path and the TypeError fallback, explained why each was wrong | Fixed only the main path, missed the TypeError fallback |
+| **More Pythonic?** | Claude | Tie |
+| **Clearer explanation?** | Claude | ChatGPT |
 
 **Which did you prefer and why?**
 
-<!-- Your conclusion -->
+I preferred Claude because it caught the bug in both the main comparison path and the TypeError fallback, while ChatGPT only fixed the main path. Claude also explained the root cause more clearly.

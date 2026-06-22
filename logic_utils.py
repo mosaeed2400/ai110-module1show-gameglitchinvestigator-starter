@@ -1,7 +1,18 @@
 # FIX: Refactored all game logic from app.py into this file using Claude Code
 
+
 def get_range_for_difficulty(difficulty: str):
-    """Return (low, high) inclusive range for a given difficulty."""
+    """Return the inclusive guessing range for a difficulty level.
+
+    Args:
+        difficulty: The difficulty name. Recognized values are
+            "Easy", "Normal", and "Hard".
+
+    Returns:
+        A ``(low, high)`` tuple of ints describing the inclusive range
+        of valid secret numbers. Unrecognized values fall back to the
+        "Normal" range of ``(1, 100)``.
+    """
     if difficulty == "Easy":
         return 1, 20
     if difficulty == "Normal":
@@ -12,9 +23,24 @@ def get_range_for_difficulty(difficulty: str):
 
 
 def parse_guess(raw: str):
-    """
-    Parse user input into an int guess.
-    Returns: (ok: bool, guess_int: int | None, error_message: str | None)
+    """Parse raw user input into an integer guess.
+
+    Accepts plain integer strings (e.g. ``"42"``) as well as decimal
+    strings (e.g. ``"42.9"``), which are truncated toward zero via
+    ``int(float(raw))``.
+
+    Args:
+        raw: The unparsed input string from the user. May be ``None``
+            or empty.
+
+    Returns:
+        A 3-tuple ``(ok, guess_int, error_message)`` where:
+
+        * ``ok`` (bool): ``True`` if parsing succeeded.
+        * ``guess_int`` (int | None): The parsed integer, or ``None``
+          on failure.
+        * ``error_message`` (str | None): A human-readable error, or
+          ``None`` on success.
     """
     if raw is None:
         return False, None, "Enter a guess."
@@ -31,11 +57,24 @@ def parse_guess(raw: str):
 
 
 def check_guess(guess, secret):
+    """Compare a guess against the secret number and return a hint.
+
+    Args:
+        guess: The player's guess. Normally an int, but the function
+            guards against type mismatches (see below).
+        secret: The secret number to compare against.
+
+    Returns:
+        A ``(outcome, message)`` tuple where ``outcome`` is one of
+        ``"Win"``, ``"Too High"``, or ``"Too Low"``, and ``message`` is
+        an emoji-prefixed hint directing the player higher or lower.
+
+    Note:
+        If comparing ``guess`` and ``secret`` raises ``TypeError``
+        (e.g. mismatched types), the guess is coerced to a string and
+        compared lexicographically as a fallback. This fallback path is
+        a last resort and does not perform numeric comparison.
     """
-    Compare guess to secret and return (outcome, message).
-    outcome examples: "Win", "Too High", "Too Low"
-    """
-    # FIXME: Original code had hints backwards — fixed by swapping HIGHER/LOWER messages
     if guess == secret:
         return "Win", "🎉 Correct!"
     try:
@@ -53,7 +92,23 @@ def check_guess(guess, secret):
 
 
 def update_score(current_score: int, outcome: str, attempt_number: int):
-    """Update score based on outcome and attempt number."""
+    """Compute the new score after a guess.
+
+    A win awards ``100 - 10 * (attempt_number + 1)`` points, floored at
+    a minimum of 10 points so later wins still score something. A
+    "Too High" outcome adds 5 points on even attempt numbers and
+    subtracts 5 otherwise; a "Too Low" outcome always subtracts 5.
+
+    Args:
+        current_score: The player's score before this guess.
+        outcome: The result from :func:`check_guess` ("Win",
+            "Too High", or "Too Low").
+        attempt_number: The 1-based count of attempts made so far.
+
+    Returns:
+        The updated score as an int. Unrecognized outcomes leave the
+        score unchanged.
+    """
     if outcome == "Win":
         points = 100 - 10 * (attempt_number + 1)
         if points < 10:

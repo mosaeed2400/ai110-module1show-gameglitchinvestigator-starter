@@ -44,7 +44,8 @@ It wrote the code, ran away, and now the game is unplayable.
 
 ```
 python3 -m pytest tests/
-========================= 3 passed in 0.02s =========================
+................
+16 passed in 0.03s
 ```
 
 ## 🚀 Stretch Features
